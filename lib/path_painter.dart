@@ -19,8 +19,7 @@ class PathPainter extends CustomPainter {
     paint.strokeWidth = 1;
 
     canvas.save();
-    canvas.scale(1, -1);
-    canvas.translate(0, -size.height);
+    canvas.scale(1, 1);
 
     for (List<List<double>> path in pointPaths) {
       for (var i = 0; i < path.length - 1; i++) {

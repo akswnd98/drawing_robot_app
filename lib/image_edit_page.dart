@@ -35,6 +35,7 @@ class ImageEditPageState extends State<ImageEditPage> {
   List<double> startPoint = [0.0, 0.0];
   List<List<List<double>>>? editedPointPaths;
   double scale = 1.0;
+  double scaleBefore = 1.0;
 
   ImageEditPageState() : super();
 
@@ -75,7 +76,7 @@ class ImageEditPageState extends State<ImageEditPage> {
                         details.focalPoint.dx - startPoint[0],
                         details.focalPoint.dy - startPoint[1],
                       ];
-                      scale *= details.scale;
+                      scale = details.scale;
 
                       setState(() => {});
                     },
@@ -85,6 +86,8 @@ class ImageEditPageState extends State<ImageEditPage> {
                         deltaBefore[1] + delta[1],
                       ];
                       delta = [0.0, 0.0];
+                      scaleBefore = scaleBefore * scale;
+                      scale = 1.0;
                       setState(() => {});
                     },
                     child: LayoutBuilder(
@@ -101,13 +104,13 @@ class ImageEditPageState extends State<ImageEditPage> {
                             getBbox(normalizedPointPaths);
                         List<List<List<double>>> scaledPointPaths =
                             ScalePointPaths(
-                          scale,
+                          scaleBefore * scale,
                           normalizedBbox,
                         ).apply(normalizedPointPaths);
                         List<List<List<double>>> offsetedPointPaths =
                             OffsetPointPaths([
                           deltaBefore[0] + delta[0],
-                          -deltaBefore[1] - delta[1],
+                          deltaBefore[1] + delta[1],
                         ]).apply(scaledPointPaths);
                         List<double> offsetedBbox = getBbox(offsetedPointPaths);
                         editedPointPaths = offsetedPointPaths;
